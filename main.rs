@@ -23,13 +23,12 @@ fn create_account(conn: &Connection, account_name: &String) {
 	conn.execute(format!("CREATE TABLE {} (token_id INTEGER PRIMARY KEY);", account_name),).unwrap();
 }
 
-fn axel_super_roll_out_tokens(conn: &Connection, to_account: &String, start_id: i64, num_of_tokens: i64) {
+fn super_roll_out_tokens(conn: &Connection, to_account: &String, start_id: i64, num_of_tokens: i64) {
 	let now = SystemTime::now();
 	conn.execute(
         "
         begin;
         ",
-    ).unwrap();
 
 	let mut statement = conn.prepare(format!("insert into {} values(?)", to_account)).unwrap();
 
@@ -48,7 +47,7 @@ fn axel_super_roll_out_tokens(conn: &Connection, to_account: &String, start_id: 
 	
 	match now.elapsed() {
 		Ok(elapsed) => {
-			println!("Axel super roll out {} tokens to {} within time {} seconds", 
+			println!("super roll out {} tokens to {} within time {} seconds", 
 			num_of_tokens, to_account, elapsed.as_secs());
 		}
 		Err(e) => {
@@ -68,12 +67,12 @@ fn main() {
 	for user_id in 0..num_of_user {
 		let account = String::from(format!("usr_{}", user_id));
 		create_account(&conn, &account);
-		axel_super_roll_out_tokens(&conn, &account, user_id*average_balance, average_balance);
+		super_roll_out_tokens(&conn, &account, user_id*average_balance, average_balance);
 	}
 
 	match now.elapsed() {
 		Ok(elapsed) => {
-			println!("Axel super roll out {} tokens to {} accounts within time {} seconds", 
+			println!("Super roll out {} tokens to {} accounts within time {} seconds", 
 			total, num_of_user, elapsed.as_secs());
 		}
 		Err(e) => {
