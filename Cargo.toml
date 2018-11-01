@@ -1,0 +1,7 @@
+[package]
+name = "new_project"
+version = "0.1.0"
+authors = ["root"]
+
+[dependencies]
+sqlite = "0.24.0"
